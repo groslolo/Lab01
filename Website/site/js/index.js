@@ -34,7 +34,7 @@ function performGetRequest1() {
   */
 
 document.getElementsByClassName('my-button')[0].onclick = function (){
-    var resultElement = document.getElementById('get-result-check');
+    var resultElement1 = document.getElementById('get-result-check');
     var inputElement = document.getElementById('my-input').value;
 
     axios.get('http://localhost:8080/')
@@ -42,15 +42,15 @@ document.getElementsByClassName('my-button')[0].onclick = function (){
 
         if (/^\d+(\.\d+)?( *[\+\-\*\/] *\d+(\.\d+)?)+$/.test(inputElement)){
             if(/\/ *0$/.test(inputElement) || /\/ *0[^\.0-9]/.test(inputElement)){
-                resultElement.innerHTML = "Math Error";     
+                resultElement1.innerHTML = "Math Error";     
             }
             else{
-                resultElement.innerHTML = "La formule est correcte";
+                resultElement1.innerHTML = "La formule est correcte";
             }       
         }
 
         else{
-            resultElement.innerHTML = "Syntax Error";
+            resultElement1.innerHTML = "Syntax Error";
         }
 
     })
@@ -60,50 +60,68 @@ document.getElementsByClassName('my-button')[0].onclick = function (){
 }
 
 document.getElementsByClassName('my-button')[1].onclick = function (){
-    var resultElement = document.getElementById('get-result-evaluate');
+    var resultElement1 = document.getElementById('get-result-check');
+    var resultElement2 = document.getElementById('get-result-evaluate');
     var inputElement = document.getElementById('my-input').value;
 
     axios.get('http://localhost:8080/')
     .then((response) => {
 
+        if (/^\d+(\.\d+)?( *[\+\-\*\/] *\d+(\.\d+)?)+$/.test(inputElement)){
+            if(/\/ *0$/.test(inputElement) || /\/ *0[^\.0-9]/.test(inputElement)){
+                resultElement1.innerHTML = "Math Error";     
+            }
+            else{
+                resultElement1.innerHTML = "La formule est correcte";
+                var a = 1;
+            }       
+        }
+
+        else{
+            resultElement1.innerHTML = "Syntax Error";
+        }
+
+
+
+
     var numbers = inputElement.split(/ *[\/\*\-\+] */);
     var signs = inputElement.match(/[\/\*\-\+]/g);
-
-    if(signs[0] == "/"){
-        var results = numbers[0] / numbers[1];
-    }
-    else if(signs[0] == "*"){
-        var results = numbers[0] * numbers[1];
-    }
-    else if(signs[0] == "-"){
-        var results = numbers[0] - numbers[1];
-    }
-    else if(signs[0] == "+"){
-        var results = parseFloat(numbers[0]) + parseFloat(numbers[1]);
-    }
-
-    var i = 1;
-    while(i<signs.length){
-        if(signs[i] == "/"){
-            results = results / numbers[i+1];
+    if(typeof a !== 'undefined'){
+        if(signs[0] == "/"){
+            var results = numbers[0] / numbers[1];
         }
-        else if(signs[i] == "*"){
-            results = results * numbers[i+1];
+        else if(signs[0] == "*"){
+            var results = numbers[0] * numbers[1];
         }
-        else if(signs[i] == "-"){
-            results = results - numbers[i+1];
+        else if(signs[0] == "-"){
+            var results = numbers[0] - numbers[1];
         }
-        else if(signs[i] == "+"){
-            results = parseFloat(results) + parseFloat(numbers[i+1]);
+        else if(signs[0] == "+"){
+            var results = parseFloat(numbers[0]) + parseFloat(numbers[1]);
         }
-        i++;
+
+        var i = 1;
+        while(i<signs.length){
+            if(signs[i] == "/"){
+                results = results / numbers[i+1];
+            }
+            else if(signs[i] == "*"){
+                results = results * numbers[i+1];
+            }
+            else if(signs[i] == "-"){
+                results = results - numbers[i+1];
+            }
+            else if(signs[i] == "+"){
+                results = parseFloat(results) + parseFloat(numbers[i+1]);
+            }
+            i++;
+        }
+
+        resultElement2.innerHTML = results;
     }
-
-    resultElement.innerHTML = results;
-
     })
     .catch((error) => {
-        resultElement.innerHTML = "ERROR : FAILED";
+        resultElement1.innerHTML = "ERROR : FAILED";
     });
 
 }
